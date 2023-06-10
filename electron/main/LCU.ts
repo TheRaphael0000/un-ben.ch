@@ -40,6 +40,7 @@ class LCU {
             method: method,
             headers: headers,
         }
+        console.log(full_url)
 
         let promise = fetch(full_url, params)
 
