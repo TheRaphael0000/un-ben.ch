@@ -1,9 +1,11 @@
 <script>
 
+import ChallengeIcon from './ChallengeIcon.vue'
 
 export default {
   props: ["challenge"],
-  created() {
+  components: {
+    ChallengeIcon,
   },
 }
 
@@ -13,12 +15,7 @@ export default {
 <template>
   <!-- <code>{{ challenge }}</code> -->
   <div class="container" :class="{ locked: challenge.currentLevel == 'NONE' }">
-    <template v-if="challenge.currentLevel == 'NONE'">
-      <img class="img" :src="`${$DD}/challenges-images/${challenge.id}-${challenge.nextLevel}.png`" />
-    </template>
-    <template v-else>
-      <img class="img" :src="`${$DD}/challenges-images/${challenge.id}-${challenge.currentLevel}.png`" />
-    </template>
+    <ChallengeIcon class="icon" :challenge="challenge" />
     <div class="progress" v-if="challenge.nextThreshold != 0">
       <span class="progressText">{{ challenge.currentValue }} / {{ challenge.nextThreshold }}</span>
       <progress class="progressBar" :value="challenge.currentValue" :max="challenge.nextThreshold"></progress>
@@ -39,6 +36,10 @@ export default {
   overflow-y: auto;
 }
 
+.icon {
+  padding: 5px;
+}
+
 .container::-webkit-scrollbar {
   width: 4px;
 }
@@ -47,10 +48,6 @@ export default {
   background-color: white;
 }
 
-.img {
-  width: 80px;
-  padding: 5px;
-}
 
 .name {
   font-weight: bold;

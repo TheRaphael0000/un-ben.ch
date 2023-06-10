@@ -37,6 +37,7 @@ export default {
 <style scoped>
 table {
   border-collapse: collapse;
+  min-height: 110px;
 }
 
 td,
@@ -61,7 +62,10 @@ tr {
 
 .profileIcon {
   margin: 10px;
-  width: 60px;
+  min-height: 60px;
+  min-width: 60px;
+  max-height: 60px;
+  max-width: 60px;
   display: block;
   border: 4px solid white;
   padding: 4px;

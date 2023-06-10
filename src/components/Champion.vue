@@ -2,8 +2,6 @@
 
 export default {
   props: ["champion"],
-  created() {
-  }
 }
 
 </script>
@@ -17,6 +15,7 @@ export default {
 .champion {
   margin: 0;
   padding: 0;
-  width: 80px
+  width: 80px;
+  height: 80px;
 }
 </style>

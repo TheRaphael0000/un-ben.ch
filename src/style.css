@@ -7,3 +7,13 @@ body {
     margin-right: auto;
     margin-top: 10px;
 }
+
+
+a {
+    color: rgb(50, 187, 205);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}

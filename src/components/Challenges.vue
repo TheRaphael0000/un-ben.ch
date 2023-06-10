@@ -1,5 +1,5 @@
 <script>
-import Challenge from './Challenge.vue'
+import ChallengeCard from './ChallengeCard.vue'
 
 function group(data, key) {
   return data.reduce((group, d) => {
@@ -13,15 +13,13 @@ function group(data, key) {
 export default {
   props: ["challenges"],
   components: {
-    Challenge,
+    ChallengeCard,
   },
   data: () => ({
     challenges_: null,
   }),
   mounted() {
-    let chall = Object.values(this.challenges)
-    chall = chall.sort(c => c.currentLevel)
-    this.challenges_ = group(chall, "category")
+    this.challenges_ = group(this.challenges, "category")
   },
 }
 
@@ -33,7 +31,7 @@ export default {
     <h1>{{ category }}</h1>
     <div class="challenges">
       <template v-for="challenge in category_challenges">
-        <Challenge :challenge="challenge" />
+        <ChallengeCard :challenge="challenge" />
       </template>
     </div>
     <!-- <Challenge :challenge="challenge" /> -->
