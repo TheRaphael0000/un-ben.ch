@@ -14,7 +14,7 @@ export default {
 
 <template>
   <!-- <code>{{ challenge }}</code> -->
-  <div class="container" :class="{ locked: challenge.currentLevel == 'NONE' }">
+  <div class="challengeCardContainer" :class="{ locked: challenge.currentLevel == 'NONE' }">
     <ChallengeIcon class="icon" :challenge="challenge" />
     <div class="progress" v-if="challenge.nextThreshold != 0">
       <span class="progressText">{{ challenge.currentValue }} / {{ challenge.nextThreshold }}</span>
@@ -26,7 +26,7 @@ export default {
 </template>
 
 <style scoped>
-.container {
+.challengeCardContainer {
   margin: 2px;
   padding: 5px;
   width: 235px;

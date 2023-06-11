@@ -6,10 +6,6 @@ export default {
   components: {
     Champion,
   },
-  data: () => ({
-  }),
-  mounted() {
-  },
 }
 
 </script>
@@ -28,9 +24,5 @@ export default {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-}
-
-.selected {
-  border: 3px solid yellow;
 }
 </style>

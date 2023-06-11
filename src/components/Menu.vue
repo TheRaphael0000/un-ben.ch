@@ -3,6 +3,7 @@
         <div><router-link to="/">Home</router-link></div>
         <div><router-link to="/ChallengesList">Challenges List</router-link></div>
         <div><router-link to="/ChampionSelect">Champion Select</router-link></div>
+        <div><router-link to="/ChallengesChampions">Challenges Champions</router-link></div>
         <div><a href="#" id="refresh">Refresh</a></div>
     </nav>
 </template>

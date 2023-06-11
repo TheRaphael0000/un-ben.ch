@@ -34,7 +34,7 @@ export default {
   display: inline-block;
 }
 
-.tooltip .tooltipData {
+.tooltipData {
   visibility: hidden;
   background-color: rgba(22, 22, 22, 0.8);
   position: absolute;
