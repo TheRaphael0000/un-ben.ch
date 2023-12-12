@@ -40,7 +40,7 @@ export default {
 <style scoped>
 .transition-enter-active,
 .transition-leave-active {
-  transition: opacity 0.3s, transform 0.3s;
+  transition: opacity 0.3s, transform 0.1s;
 }
 
 .transition-enter-from,

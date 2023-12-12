@@ -4,14 +4,21 @@
         <div><router-link to="/ChallengesList">Challenges List</router-link></div>
         <div><router-link to="/ChampionSelect">Champion Select</router-link></div>
         <div><router-link to="/ChallengesChampions">Challenges Champions</router-link></div>
+        <div><router-link to="/Ethernals">Ethernals</router-link></div>
         <div><a href="#" id="refresh">Refresh</a></div>
     </nav>
 </template>
 
 <script>
+import Context from '../Context'
+
 export default {
     mounted() {
-        document.querySelector("#refresh").addEventListener("click", () => { this.$router.go(0) });
+        document.querySelector("#refresh").addEventListener("click", () => {
+            this.$router.go(0)
+            // let context = Context.getInstance()
+            // context.updateOnce()
+        });
     },
 }
 </script>

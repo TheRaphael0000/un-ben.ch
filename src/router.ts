@@ -4,12 +4,14 @@ import Home from './pages/Home.vue'
 import ChallengesList from './pages/ChallengesList.vue'
 import ChampionSelect from './pages/ChampionSelect.vue'
 import ChallengesChampions from './pages/ChallengesChampions.vue'
+import Ethernals from './pages/Ethernals.vue'
 
 const routes = [
     { path: '/', component: Home },
     { path: '/ChallengesList', component: ChallengesList },
     { path: '/ChampionSelect', component: ChampionSelect },
     { path: '/ChallengesChampions', component: ChallengesChampions },
+    { path: '/Ethernals', component: Ethernals },
 ]
 
 const router = createRouter({

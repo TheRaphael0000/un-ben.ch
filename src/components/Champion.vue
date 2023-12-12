@@ -8,9 +8,9 @@ export default {
 
 
 <template>
-  <div class="championContainer">
+  <div :class='["championContainer", { is_dim: !champion.is_completed, is_fade: !champion.is_available }]'>
     <img class="champion" :src="`${$DDP}/champion/${champion.alias}.png`" />
-    <div class="mastery">
+    <div :class='["mastery_level", "mastery_level_" + champion?.mastery?.championLevel]'>
       <template v-if="champion.mastery != undefined">
         {{ champion.mastery.championLevel }}
       </template>
@@ -27,23 +27,39 @@ export default {
   position: relative;
 }
 
-.mastery {
+
+.mastery_level {
   position: absolute;
   bottom: 0;
   right: 0;
-  padding: 2px 6px;
-  margin: -2px;
-  background-color: rgba(22, 22, 22, 0.9);
-  /* background-color: yellow; */
+  font-size: 1em;
+  font-weight: bold;
+  margin: 3px 3px;
+  opacity: 0.9;
+  pointer-events: none;
+  padding: 0px 6px;
+  background-color: #22222296;
   border-radius: 50% 0 0 0;
+}
+
+.mastery_level_7 {
+  background-color: #1C8C8C96;
+}
+
+.mastery_level_6 {
+  background-color: #8C1C8796;
+}
+
+.mastery_level_5 {
+  background-color: #8C201C96;
 }
 
 
 .champion {
   margin: 0;
   padding: 0;
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
 }
 
 .championContainer .name {
@@ -60,5 +76,13 @@ export default {
 
 .championContainer:hover .name {
   visibility: visible;
+}
+
+.is_dim {
+  opacity: 0.3;
+}
+
+.is_fade {
+  opacity: 0.1;
 }
 </style>

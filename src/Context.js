@@ -1,3 +1,5 @@
+import { orderBy } from "lodash"
+
 class PrivateContext {
     constructor() {
     }
@@ -9,13 +11,35 @@ class PrivateContext {
             this.masteries = await window.lcu.fetch("GET", "json", `/lol-collections/v1/inventories/${this.summoner['summonerId']}/champion-mastery`)
             this.champions = await window.lcu.fetch("GET", "json", `/lol-champions/v1/inventories/${this.summoner['summonerId']}/champions-minimal`)
 
-            this.champions = this.champions.filter(c => c.id > 0).sort((a, b) => a.name.localeCompare(b.name))
+            this.champions = this.champions.filter(c => c.id > 0)
 
             for (let champion of this.champions) {
                 champion.mastery = this.masteries.find(x => x.championId == champion.id)
             }
+            this.champions = orderBy(this.champions, [({ mastery }) => mastery != undefined, "mastery.championLevel", "mastery.championPoints"], ["desc", "desc", "desc"])
+
+            for (let challenge of this.challenges) {
+
+                if (challenge.idListType != "CHAMPION")
+                    continue;
+
+                let champs = [];
+                for (let champion of this.champions) {
+                    champion = { ...champion }
+                    champion.is_available = challenge.availableIds.length <= 0 || challenge.availableIds.includes(champion.id)
+                    champion.is_completed = challenge.completedIds.includes(champion.id)
+                    champs.push(champion)
+                }
+
+                challenge["champions"] = champs
+            }
+
+            this.challenges = this.challenges.filter(c => c?.champions?.length > 0)
+
+            this.challenges.sort((a, b) => -(a.currentValue - b.currentValue))
         }
-        catch {
+        catch (error) {
+            console.error(error);
             return false
         }
 

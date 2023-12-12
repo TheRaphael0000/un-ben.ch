@@ -6,7 +6,20 @@ body {
     margin-left: auto;
     margin-right: auto;
     margin-top: 10px;
+    font-size: 1.2em;
+    overflow-y: scroll;
 }
+
+body::-webkit-scrollbar {
+    width: 12px;
+    /* Adjust as needed */
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: #ffffff4b;
+    border-radius: 1px;
+}
+
 
 
 a {

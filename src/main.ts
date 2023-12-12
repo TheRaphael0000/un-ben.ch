@@ -9,5 +9,5 @@ let app = createApp(App)
 app.use(router)
 app.mount('#app')
 
-app.config.globalProperties.$DD = `src/static/dragontail-13.11.1/img`
-app.config.globalProperties.$DDP = `src/static/dragontail-13.11.1/13.11.1/img`
+app.config.globalProperties.$DD = `src/static/dragontail-13.24.1/img`
+app.config.globalProperties.$DDP = `src/static/dragontail-13.24.1/13.24.1/img`

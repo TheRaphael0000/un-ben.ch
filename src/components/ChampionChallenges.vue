@@ -18,7 +18,6 @@ export default {
   },
   mounted() {
     let context = Context.getInstance()
-    // console.log(this.champion)
 
     this.challenges = context.challenges.filter(c =>
       c.idListType == "CHAMPION" &&
@@ -30,7 +29,6 @@ export default {
       (c.availableIds.includes(this.champion.id) || c.availableIds.length == 0)
     );
 
-    console.log(this.champion.id, this.challenges)
   },
 }
 

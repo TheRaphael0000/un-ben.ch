@@ -27,10 +27,6 @@ export default {
         {{ summoner.displayName }}
       </td>
     </tr>
-    <tr>
-    </tr>
-    <tr>
-    </tr>
   </table>
 </template>
 
@@ -67,9 +63,9 @@ tr {
   max-height: 60px;
   max-width: 60px;
   display: block;
-  border: 4px solid white;
+  border: 2px solid rgba(255, 255, 255, 0.5);
   padding: 4px;
-  border-radius: 50%;
+  border-radius: 0%;
 }
 
 .level {

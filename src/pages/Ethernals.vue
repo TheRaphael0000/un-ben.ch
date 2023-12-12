@@ -21,14 +21,10 @@ export default {
     await context.update()
 
     this.challenges = context.challenges.filter(c =>
-      c.idListType == "CHAMPION" &&
-      c.capstoneGroupName != "Harmony" &&
-      c.capstoneGroupName != "Globetrotter" &&
-      c.retireTimestamp == 0
+      c.capstoneGroupId == "501000" &&
+      c.idListType == "CHAMPION"
     );
-
     console.log(this.challenges)
-
   }
 }
 
@@ -38,12 +34,8 @@ export default {
   <div>
     <div class="container" v-for="challenge of challenges">
       <!-- <code>{{ challenge }}</code> -->
-      <div>
-        <ChallengeCard class="challengeCard" :challenge="challenge" />
-      </div>
-      <div>
-        <Champions class="champions" :champions="challenge.champions" />
-      </div>
+      <ChallengeCard class="challengeCard" :challenge="challenge" />
+      <Champions class="champions" :champions="challenge.champions" />
     </div>
   </div>
 </template>

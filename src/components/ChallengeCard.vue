@@ -14,14 +14,16 @@ export default {
 
 <template>
   <!-- <code>{{ challenge }}</code> -->
-  <div class="challengeCardContainer" :class="{ locked: challenge.currentLevel == 'NONE' }">
-    <ChallengeIcon class="icon" :challenge="challenge" />
-    <div class="progress" v-if="challenge.nextThreshold != 0">
-      <span class="progressText">{{ challenge.currentValue }} / {{ challenge.nextThreshold }}</span>
-      <progress class="progressBar" :value="challenge.currentValue" :max="challenge.nextThreshold"></progress>
+  <div>
+    <div class="challengeCardContainer" :class="{ locked: challenge.currentLevel == 'NONE' }">
+      <ChallengeIcon class="icon" :challenge="challenge" />
+      <div class="progress" v-if="challenge.nextThreshold != 0">
+        <span class="progressText">{{ challenge.currentValue }} / {{ challenge.nextThreshold }}</span>
+        <progress class="progressBar" :value="challenge.currentValue" :max="challenge.nextThreshold"></progress>
+      </div>
+      <div class="name">{{ challenge.name }}</div>
+      <div class="description">{{ challenge.description }}</div>
     </div>
-    <div class="name">{{ challenge.name }}</div>
-    <div class="description">{{ challenge.description }}</div>
   </div>
 </template>
 
@@ -29,15 +31,15 @@ export default {
 .challengeCardContainer {
   margin: 2px;
   padding: 5px;
-  width: 235px;
-  height: 260px;
+  width: 13em;
+  height: 16em;
   text-align: center;
   border: 2px solid grey;
   overflow-y: auto;
 }
 
 .icon {
-  padding: 5px;
+  padding: 10px;
 }
 
 .container::-webkit-scrollbar {
@@ -61,6 +63,7 @@ export default {
 
 .description {
   padding: 3px;
+  font-size: 0.8em;
 }
 
 .progress {
