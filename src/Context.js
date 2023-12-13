@@ -23,15 +23,16 @@ class PrivateContext {
                 if (challenge.idListType != "CHAMPION")
                     continue;
 
-                let champs = [];
+                let champions = [];
                 for (let champion of this.champions) {
-                    champion = { ...champion }
-                    champion.is_available = challenge.availableIds.length <= 0 || challenge.availableIds.includes(champion.id)
-                    champion.is_completed = challenge.completedIds.includes(champion.id)
-                    champs.push(champion)
+                    champions.push({
+                        ...champion,
+                        is_available: challenge.availableIds.length <= 0 || challenge.availableIds.includes(champion.id),
+                        is_completed: challenge.completedIds.includes(champion.id)
+                    })
                 }
 
-                challenge["champions"] = champs
+                challenge["champions"] = champions
             }
 
             this.challenges = this.challenges.filter(c => c?.champions?.length > 0)
@@ -47,8 +48,8 @@ class PrivateContext {
 
     async update() {
         try {
-            this.champSelect = await window.lcu.fetch("GET", "json", `/lol-champ-select/v1/session`)
-            // this.champSelect = await (await fetch("src/simulation/aramChampSelect.json")).json()
+            // this.champSelect = await window.lcu.fetch("GET", "json", `/lol-champ-select/v1/session`)
+            this.champSelect = await (await fetch("src/simulation/aramChampSelect.json")).json()
         }
         catch {
             return false

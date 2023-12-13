@@ -1,7 +1,7 @@
 <script>
 
 export default {
-  props: ["challenge"],
+  props: ["challenge", "width"],
 }
 
 </script>
@@ -10,10 +10,12 @@ export default {
 <template>
   <div>
     <template v-if="challenge.currentLevel == 'NONE'">
-      <img class="img" :src="`${$DD}/challenges-images/${challenge.id}-${challenge.nextLevel}.png`" />
+      <img class="img" :style="{ width: width }"
+        :src="`${$DD}/challenges-images/${challenge.id}-${challenge.nextLevel}.png`" />
     </template>
     <template v-else>
-      <img class="img" :src="`${$DD}/challenges-images/${challenge.id}-${challenge.currentLevel}.png`" />
+      <img class="img" :style="{ width: width }"
+        :src="`${$DD}/challenges-images/${challenge.id}-${challenge.currentLevel}.png`" />
     </template>
   </div>
 </template>

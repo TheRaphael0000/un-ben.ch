@@ -36,7 +36,7 @@ export default {
 
 
 <template>
-  <div v-if="champion != undefined" class="container">
+  <div class="container">
     <Champion class="champion" :champion="champion" />
     <div class="challenges">
       <ChallengeTooltip v-for="challenge of challenges" :challenge="challenge" />

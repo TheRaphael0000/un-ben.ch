@@ -14,7 +14,7 @@ export default {
 <template>
   <div class="champions">
     <template v-for="champion in champions">
-      <Champion :champion="champion" />
+      <Champion :champion="champion" v-if="champion.is_available" :class='[{ is_dim: !champion.is_completed }]' />
     </template>
   </div>
 </template>
@@ -24,5 +24,10 @@ export default {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+}
+
+
+.is_dim {
+  opacity: 0.3;
 }
 </style>

@@ -8,7 +8,7 @@ export default {
 
 
 <template>
-  <div :class='["championContainer", { is_dim: !champion.is_completed, is_fade: !champion.is_available }]'>
+  <div class="championContainer">
     <img class="champion" :src="`${$DDP}/champion/${champion.alias}.png`" />
     <div :class='["mastery_level", "mastery_level_" + champion?.mastery?.championLevel]'>
       <template v-if="champion.mastery != undefined">
@@ -58,8 +58,8 @@ export default {
 .champion {
   margin: 0;
   padding: 0;
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
 }
 
 .championContainer .name {
@@ -76,13 +76,5 @@ export default {
 
 .championContainer:hover .name {
   visibility: visible;
-}
-
-.is_dim {
-  opacity: 0.3;
-}
-
-.is_fade {
-  opacity: 0.1;
 }
 </style>

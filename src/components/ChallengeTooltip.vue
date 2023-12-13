@@ -4,7 +4,7 @@ import ChallengeCard from './ChallengeCard.vue'
 import ChallengeIcon from './ChallengeIcon.vue'
 
 export default {
-  props: ["challenge"],
+  props: ["challenge", "width"],
   components: {
     ChallengeCard,
     ChallengeIcon,
@@ -16,7 +16,7 @@ export default {
 
 <template>
   <!-- <code>{{ challenge }}</code> -->
-  <div class="container tooltip" :class="{ locked: challenge.currentLevel == 'NONE' }">
+  <div class="container tooltip">
     <ChallengeIcon :challenge="challenge" />
     <ChallengeCard class="tooltipData" :challenge="challenge" />
   </div>
