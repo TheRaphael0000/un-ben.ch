@@ -16,7 +16,7 @@ export default {
   }),
   async mounted() {
     let context = Context.getInstance()
-    await context.update()
+    await context.updateChampSelect()
     this.champSelect = context.champSelect
 
     if (!this.champSelect)

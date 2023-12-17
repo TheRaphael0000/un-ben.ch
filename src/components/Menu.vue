@@ -5,6 +5,7 @@
         <div><router-link to="/ChampionSelect">Champion Select</router-link></div>
         <div><router-link to="/ChallengesChampions">Challenges Champions</router-link></div>
         <div><router-link to="/Ethernals">Ethernals</router-link></div>
+        <div><router-link to="/InGame">In Game</router-link></div>
         <div><a href="#" id="refresh">Refresh</a></div>
     </nav>
 </template>

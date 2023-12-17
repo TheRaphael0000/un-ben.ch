@@ -55,7 +55,7 @@ class PrivateContext {
 
     }
 
-    async update() {
+    async updateChampSelect() {
         try {
             this.champSelect = await window.lcu.fetch("GET", "json", `/lol-champ-select/v1/session`)
             // this.champSelect = await (await fetch("src/simulation/aramChampSelect.json")).json()
@@ -63,6 +63,31 @@ class PrivateContext {
         catch {
             return false
         }
+    }
+
+    async updateGameflow() {
+        try {
+            this.session = await window.lcu.fetch("GET", "json", `/lol-gameflow/v1/session`)
+            // this.session = await (await fetch("src/simulation/sessionCustom.json")).json()
+
+            if (this.session?.httpStatus ?? 0 == 404) {
+                this.session = undefined
+                throw new Error()
+            }
+
+            for (let player of this.session.gameData.teamOne.concat(this.session.gameData.teamTwo)) {
+                await this.addPlayerData(player, this.session.gameData.playerChampionSelections)
+            }
+        }
+        catch {
+            return false
+        }
+    }
+
+    async addPlayerData(player, selections) {
+        player.ranked = await window.lcu.fetch("GET", "json", `/lol-ranked/v1/ranked-stats/${player.puuid}`)
+        player.champion = this.champions.find(c => c.id == player.championId)
+        player.selection = selections.find(s => s.summonerInternalName == player.summonerInternalName)
     }
 
 }
