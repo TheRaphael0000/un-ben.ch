@@ -16,12 +16,11 @@ export default {
   },
   data: () => ({
     challenges: null,
-    selectedChallenge: null,
+    challenge: null,
     grouped_challenges: null,
   }),
   async mounted() {
     let context = Context.getInstance()
-    await context.update()
 
     this.challenges = context.challenges.filter(c =>
       c.idListType == "CHAMPION" &&
@@ -32,7 +31,8 @@ export default {
 
     this.grouped_challenges = groupBy(this.challenges, (c) => c.parentId)
 
-    console.log(this.challenges)
+    console.log(context.challenges)
+    console.log(context.friends)
 
   }
 }
@@ -41,26 +41,33 @@ export default {
 
 <template>
   <div class="container">
-    <div class="menu">
+    <div class="left_side">
       <div v-for="challenges_ of  grouped_challenges ">
         <h4>
           {{ challenges_[0].parentName }}
         </h4>
-        <table v-for="challenge of challenges_ "
-          :class="[{ selected: challenge == selectedChallenge, not_selected: challenge != selectedChallenge }]">
-          <tr class="row" @click="selectedChallenge = challenge">
-            <td class="icon">
-              <ChallengeTooltip :challenge="challenge" />
-            </td>
-            <td class="name">
-              {{ challenge.name }}
-            </td>
-          </tr>
-        </table>
+        <div v-for="challenge_ of challenges_ "
+          :class="[{ selected: challenge_ == challenge, not_selected: challenge_ != challenge }]">
+          <div class="row" @click="challenge = challenge_">
+            <img class="challenge_icon"
+              :src="`${$DD}/challenges-images/${challenge_.id}-${challenge_.currentLevel}.png`" />
+            <div class="name">
+              {{ challenge_.name }}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div v-if="selectedChallenge != null">
-      <Champions class="champions" :champions="selectedChallenge.champions" />
+    <div class="right_side" v-if="challenge != null">
+      <div class="title">
+        <h1>
+          {{ challenge.capstoneGroupName }} / {{ challenge.name }}
+        </h1>
+        <h4>
+          {{ challenge.description }}
+        </h4>
+      </div>
+      <Champions class="champions" :champions="challenge.champions" />
     </div>
     <div v-else class="no_selection">
       Please select a challenge on the left.
@@ -69,25 +76,20 @@ export default {
 </template>
 
 <style scoped>
-.menu {
+.container {
+  display: flex;
+}
+
+.left_side {
   display: block;
-  height: calc(100vh - 280px);
+  flex: 0 0 340px;
+  height: calc(100vh - 245px);
   overflow-y: scroll;
-  width: 400px;
-  float: left;
-  overflow-x: hidden;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
-}
-
-th:first-child,
-td:first-child {
-  width: 80px;
-  /* Adjust the width as needed */
+.right_side {
+  flex: 1;
+  padding: 10px;
 }
 
 .selected {
@@ -100,6 +102,8 @@ td:first-child {
 }
 
 .row {
+  display: flex;
+  align-items: center;
   cursor: pointer;
   margin: 3px;
 }
@@ -108,12 +112,17 @@ td:first-child {
   background-color: rgba(255, 255, 255, 0.11);
 }
 
+.title {
+  /* text-align: center; */
+}
+
 .name {
   padding: 10px;
   text-align: left;
 }
 
-.icon {
+.challenge_icon {
+  height: 60px;
   padding: 5px;
 }
 

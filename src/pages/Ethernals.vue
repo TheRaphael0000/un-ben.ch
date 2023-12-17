@@ -18,7 +18,6 @@ export default {
   }),
   async mounted() {
     let context = Context.getInstance()
-    await context.update()
 
   }
 }

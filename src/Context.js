@@ -1,4 +1,5 @@
 import { orderBy } from "lodash"
+import main from "./main"
 
 class PrivateContext {
     constructor() {
@@ -10,6 +11,7 @@ class PrivateContext {
             this.challenges = Object.values(await window.lcu.fetch("GET", "json", `/lol-challenges/v1/challenges/local-player`))
             this.masteries = await window.lcu.fetch("GET", "json", `/lol-collections/v1/inventories/${this.summoner['summonerId']}/champion-mastery`)
             this.champions = await window.lcu.fetch("GET", "json", `/lol-champions/v1/inventories/${this.summoner['summonerId']}/champions-minimal`)
+            this.friends = await window.lcu.fetch("GET", "json", `/lol-chat/v1/friends`)
 
             this.champions = this.champions.filter(c => c.id > 0)
 
@@ -19,10 +21,21 @@ class PrivateContext {
             this.champions = orderBy(this.champions, [({ mastery }) => mastery != undefined, "mastery.championLevel", "mastery.championPoints"], ["desc", "desc", "desc"])
 
             for (let challenge of this.challenges) {
+                // friends linking
+                challenge.friendsAtLevels = orderBy(challenge.friendsAtLevels, (l) => -main.challenge_order.indexOf(l.level))
+
+                for (let level of challenge.friendsAtLevels) {
+                    let friends = []
+                    for (let friend of level.friends) {
+                        friends.push(this.friends.find(f => f.puuid == friend))
+                    }
+                    level.friends = orderBy(friends, "name")
+                }
 
                 if (challenge.idListType != "CHAMPION")
                     continue;
 
+                // champions linking
                 let champions = [];
                 for (let champion of this.champions) {
                     champions.push({
@@ -31,13 +44,9 @@ class PrivateContext {
                         is_completed: challenge.completedIds.includes(champion.id)
                     })
                 }
-
                 challenge["champions"] = champions
             }
-
-            this.challenges = this.challenges.filter(c => c?.champions?.length > 0)
-
-            this.challenges.sort((a, b) => -(a.currentValue - b.currentValue))
+            this.challenges = orderBy(this.challenges, (c) => -main.challenge_order.indexOf(c.currentLevel))
         }
         catch (error) {
             console.error(error);
@@ -48,8 +57,8 @@ class PrivateContext {
 
     async update() {
         try {
-            // this.champSelect = await window.lcu.fetch("GET", "json", `/lol-champ-select/v1/session`)
-            this.champSelect = await (await fetch("src/simulation/aramChampSelect.json")).json()
+            this.champSelect = await window.lcu.fetch("GET", "json", `/lol-champ-select/v1/session`)
+            // this.champSelect = await (await fetch("src/simulation/aramChampSelect.json")).json()
         }
         catch {
             return false

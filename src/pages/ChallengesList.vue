@@ -13,7 +13,6 @@ export default {
   }),
   async mounted() {
     let data = Context.getInstance()
-    await data.update()
     this.challenges = data.challenges
   },
 }

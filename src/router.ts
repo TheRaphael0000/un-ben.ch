@@ -5,6 +5,7 @@ import ChallengesList from './pages/ChallengesList.vue'
 import ChampionSelect from './pages/ChampionSelect.vue'
 import ChallengesChampions from './pages/ChallengesChampions.vue'
 import Ethernals from './pages/Ethernals.vue'
+import FriendsChallenge from './pages/FriendsChallenge.vue'
 
 const routes = [
     { path: '/', component: Home },
@@ -12,6 +13,7 @@ const routes = [
     { path: '/ChampionSelect', component: ChampionSelect },
     { path: '/ChallengesChampions', component: ChallengesChampions },
     { path: '/Ethernals', component: Ethernals },
+    { path: '/FriendsChallenge/:challenge_id', component: FriendsChallenge },
 ]
 
 const router = createRouter({

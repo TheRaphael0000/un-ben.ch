@@ -23,6 +23,9 @@ export default {
       </div>
       <div class="name">{{ challenge.name }}</div>
       <div class="description">{{ challenge.description }}</div>
+      <div class="links">
+        <router-link :to="`/FriendsChallenge/${challenge.id}`">Friends</router-link>
+      </div>
     </div>
   </div>
 </template>
