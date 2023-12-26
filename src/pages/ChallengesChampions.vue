@@ -42,7 +42,7 @@ export default {
 <template>
   <div class="container">
     <div class="left_side">
-      <div v-for="challenges_ of  grouped_challenges ">
+      <div v-for="challenges_ of grouped_challenges ">
         <h4>
           {{ challenges_[0].parentName }}
         </h4>
@@ -58,19 +58,21 @@ export default {
         </div>
       </div>
     </div>
-    <div class="right_side" v-if="challenge != null">
-      <div class="title">
+    <div class="right_side">
+      <div v-if="challenge != null">
         <h1>
           {{ challenge.capstoneGroupName }} / {{ challenge.name }}
         </h1>
         <h4>
           {{ challenge.description }}
         </h4>
+        <Champions class="champions" :champions="challenge.champions" />
       </div>
-      <Champions class="champions" :champions="challenge.champions" />
-    </div>
-    <div v-else class="no_selection">
-      Please select a challenge on the left.
+      <div v-else class="no_selection">
+        <h1>
+          Please select a challenge on the left.
+        </h1>
+      </div>
     </div>
   </div>
 </template>
@@ -78,18 +80,20 @@ export default {
 <style scoped>
 .container {
   display: flex;
+  flex: 1;
+  overflow: hidden;
 }
 
 .left_side {
-  display: block;
-  flex: 0 0 340px;
-  height: calc(100vh - 245px);
+  flex: 0 0 auto;
   overflow-y: scroll;
 }
 
 .right_side {
   flex: 1;
-  padding: 10px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  margin: 0px 20px 20px 20px;
 }
 
 .selected {
@@ -112,10 +116,6 @@ export default {
   background-color: rgba(255, 255, 255, 0.11);
 }
 
-.title {
-  /* text-align: center; */
-}
-
 .name {
   padding: 10px;
   text-align: left;
@@ -129,11 +129,5 @@ export default {
 .challengeCard {
   display: inline-block;
   margin-right: 20px;
-}
-
-.no_selection {
-  margin: 30px;
-  text-align: center;
-  font-size: 1.5em;
 }
 </style>

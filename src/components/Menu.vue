@@ -28,10 +28,6 @@ export default {
 </template>
 
 <style scoped>
-.menu {
-    margin-bottom: 10px;
-}
-
 .background {
     position: fixed;
     background-position: center;
@@ -45,22 +41,25 @@ export default {
 }
 
 nav {
+    flex: 0 0 auto;
+    margin-bottom: 10px;
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: 20px;
-    padding-bottom: 5px;
     border-bottom: 2px solid white;
-}
-
-nav>* {
-    padding: 10px 20px;
-}
-
-.router-link-active {
-    background-color: rgba(0, 255, 255, 0.3);
 }
 
 .right-align {
     margin-left: auto;
+}
+
+a {
+    transition: 0.2s;
+    padding: 10px 30px;
+}
+
+a:hover,
+.router-link-active {
+    background-color: rgb(50, 187, 205, 0.2);
+    text-decoration: none !important;
 }
 </style>
