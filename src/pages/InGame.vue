@@ -10,14 +10,15 @@ export default {
   data: () => ({
     session: null,
     queue: null,
+    queues: null,
   }),
   async mounted() {
     let context = Context.getInstance()
     await context.updateGameflow()
 
     this.session = context.session
-    console.log(this.session)
-    this.queue = "RANKED_SOLO_5x5"
+    this.queues = context.session.gameData.teamOne[0].ranked.queues.map(q => q.queueType)
+    this.queue = this.queues[0]
   }
 }
 
@@ -25,8 +26,14 @@ export default {
 
 <template>
   <div>
-    <h1>In Game</h1>
-    <div v-if="session">
+    <div class="teams" v-if="session">
+      <h1>{{ session.gameData.queue.detailedDescription }}
+
+        <select v-model="queue" class="right">
+          <option v-for="queue in queues" :value="queue">{{ queue }}</option>
+        </select>
+      </h1>
+
       <div class="team">
         <PlayerCard class="player" :player="player" :queue="queue" v-for="player in session.gameData.teamOne" />
       </div>
@@ -42,9 +49,17 @@ export default {
 </template>
 
 <style scoped>
+.teams {}
+
 .team {
   display: flex;
+  justify-content: center;
+
 }
 
 .player {}
+
+.right {
+  float: right;
+}
 </style>

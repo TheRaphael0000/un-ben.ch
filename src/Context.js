@@ -67,7 +67,9 @@ class PrivateContext {
 
     async updateGameflow() {
         try {
+            this.session = null
             this.session = await window.lcu.fetch("GET", "json", `/lol-gameflow/v1/session`)
+            // console.log(this.session)
             // this.session = await (await fetch("src/simulation/sessionCustom.json")).json()
 
             if (this.session?.httpStatus ?? 0 == 404) {
@@ -78,6 +80,9 @@ class PrivateContext {
             for (let player of this.session.gameData.teamOne.concat(this.session.gameData.teamTwo)) {
                 await this.addPlayerData(player, this.session.gameData.playerChampionSelections)
             }
+
+            this.session.gameData.teamOne = orderBy(this.session.gameData.teamOne, (c) => main.role_order.indexOf(c.selectedPosition))
+            this.session.gameData.teamTwo = orderBy(this.session.gameData.teamTwo, (c) => main.role_order.indexOf(c.selectedPosition))
         }
         catch {
             return false
@@ -87,6 +92,7 @@ class PrivateContext {
     async addPlayerData(player, selections) {
         player.ranked = await window.lcu.fetch("GET", "json", `/lol-ranked/v1/ranked-stats/${player.puuid}`)
         player.champion = this.champions.find(c => c.id == player.championId)
+        player.current = player.summonerId == this.summoner.summonerId
         player.selection = selections.find(s => s.summonerInternalName == player.summonerInternalName)
     }
 

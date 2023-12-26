@@ -9,10 +9,11 @@ let app = createApp(App)
 app.use(router)
 app.mount('#app')
 
-let challenge_order = ["IRON", "BRONZE", "SILVER", "GOLD", "PLATINUM", "DIAMOND", "MASTER", "GRANDMASTER", "CHALLLENGER"]
+const challenge_order = ["IRON", "BRONZE", "SILVER", "GOLD", "PLATINUM", "DIAMOND", "MASTER", "GRANDMASTER", "CHALLLENGER"]
+const role_order = ["TOP", "JUNGLE", "MIDDLE", "BOTTOM", "UTILITY"]
 
 app.config.globalProperties.$DD = `/src/static/dragontail-13.24.1/img`
 app.config.globalProperties.$DDP = `/src/static/dragontail-13.24.1/13.24.1/img`
 app.config.globalProperties.$CHALLENGE_ORDER = challenge_order
 
-export default { challenge_order }
+export default { challenge_order, role_order }

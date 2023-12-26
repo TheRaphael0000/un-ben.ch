@@ -1,24 +1,15 @@
 <script>
 
-import ChampionChallenges from '../components/ChampionChallenges.vue'
-import ChallengeCard from '../components/ChallengeCard.vue'
-import ChallengeIcon from '../components/ChallengeIcon.vue'
-import Champions from '../components/Champions.vue'
 import Context from '../Context'
 
 export default {
   components: {
-    ChampionChallenges,
-    ChallengeCard,
-    ChallengeIcon,
-    Champions,
   },
   data: () => ({
     challenges: null,
   }),
   async mounted() {
     let context = Context.getInstance()
-
   }
 }
 
@@ -26,6 +17,7 @@ export default {
 
 <template>
   <div>
+    <img src="https://127.0.0.1:29107/lol-game-data/assets/v1/champion-splashes/233/233000.jpg" />
   </div>
 </template>
 

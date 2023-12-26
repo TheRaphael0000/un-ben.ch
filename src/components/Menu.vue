@@ -1,44 +1,66 @@
-<template>
-    <nav>
-        <div><router-link to="/">Home</router-link></div>
-        <div><router-link to="/ChallengesList">Challenges List</router-link></div>
-        <div><router-link to="/ChampionSelect">Champion Select</router-link></div>
-        <div><router-link to="/ChallengesChampions">Challenges Champions</router-link></div>
-        <div><router-link to="/Ethernals">Ethernals</router-link></div>
-        <div><router-link to="/InGame">In Game</router-link></div>
-        <div><a href="#" id="refresh">Refresh</a></div>
-    </nav>
-</template>
-
 <script>
 import Context from '../Context'
 
 export default {
-    mounted() {
+    components: {
+    },
+    data: () => ({
+    }),
+    async mounted() {
         document.querySelector("#refresh").addEventListener("click", () => {
             this.$router.go(0)
-            // let context = Context.getInstance()
-            // context.updateOnce()
         });
     },
 }
 </script>
 
+
+<template>
+    <nav class="menu">
+        <router-link to="/">Home</router-link>
+        <router-link to="/ChallengesList">Challenges List</router-link>
+        <router-link to="/ChampionSelect">Champion Select</router-link>
+        <router-link to="/ChallengesChampions">Challenges Champions</router-link>
+        <router-link to="/Ethernals">Ethernals</router-link>
+        <router-link to="/InGame">In Game</router-link>
+        <a href="#" id="refresh" class="right-align">Refresh</a>
+    </nav>
+</template>
+
 <style scoped>
+.menu {
+    margin-bottom: 10px;
+}
+
+.background {
+    position: fixed;
+    background-position: center;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    filter: blur(5px);
+    transform: scale(1.05);
+    opacity: 0.8;
+    z-index: -1;
+}
+
 nav {
     display: flex;
-    margin-top: 10px;
-    margin-bottom: 40px;
-    padding-bottom: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    padding-bottom: 5px;
     border-bottom: 2px solid white;
 }
 
-nav div {
-    width: auto;
+nav>* {
     padding: 10px 20px;
 }
 
 .router-link-active {
-    color: greenyellow;
+    background-color: rgba(0, 255, 255, 0.3);
+}
+
+.right-align {
+    margin-left: auto;
 }
 </style>
