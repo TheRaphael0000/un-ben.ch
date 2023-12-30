@@ -12,7 +12,6 @@ export default {
     mounted() {
         let context = Context.getInstance()
         this.summoner = context.summoner
-        console.log(this.summoner)
     }
 }
 

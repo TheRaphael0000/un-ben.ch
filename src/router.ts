@@ -4,18 +4,20 @@ import Home from './pages/Home.vue'
 import ChallengesList from './pages/ChallengesList.vue'
 import ChampionSelect from './pages/ChampionSelect.vue'
 import ChallengesChampions from './pages/ChallengesChampions.vue'
-import Ethernals from './pages/Ethernals.vue'
+import Masteries from './pages/Masteries.vue'
 import FriendsChallenge from './pages/FriendsChallenge.vue'
 import InGame from './pages/InGame.vue'
+import Multisearch from './pages/Multisearch.vue'
 
 const routes = [
     { path: '/', component: Home },
     { path: '/ChallengesList', component: ChallengesList },
     { path: '/ChampionSelect', component: ChampionSelect },
     { path: '/ChallengesChampions', component: ChallengesChampions },
-    { path: '/Ethernals', component: Ethernals },
+    { path: '/Masteries', component: Masteries },
     { path: '/FriendsChallenge/:challenge_id', component: FriendsChallenge },
     { path: '/InGame', component: InGame },
+    { path: '/Multisearch', component: Multisearch },
 ]
 
 const router = createRouter({

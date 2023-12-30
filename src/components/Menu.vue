@@ -21,8 +21,9 @@ export default {
         <router-link to="/ChallengesList">Challenges List</router-link>
         <router-link to="/ChampionSelect">Champion Select</router-link>
         <router-link to="/ChallengesChampions">Challenges Champions</router-link>
-        <router-link to="/Ethernals">Ethernals</router-link>
+        <router-link to="/Masteries">Masteries</router-link>
         <router-link to="/InGame">In Game</router-link>
+        <router-link to="/Multisearch">Multisearch</router-link>
         <a href="#" id="refresh" class="right-align">Refresh</a>
     </nav>
 </template>

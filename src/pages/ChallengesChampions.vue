@@ -30,10 +30,6 @@ export default {
     );
 
     this.grouped_challenges = groupBy(this.challenges, (c) => c.parentId)
-
-    console.log(context.challenges)
-    console.log(context.friends)
-
   }
 }
 

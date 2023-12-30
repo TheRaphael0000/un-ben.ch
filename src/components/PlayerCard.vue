@@ -13,13 +13,13 @@ export default {
       return this.player.ranked.queueMap[this.queue]
     },
     tier() {
-      return _.upperFirst(_.toLower(this.queueData.tier))
+      return _.upperFirst(_.toLower(this.queueData?.tier))
     },
     division() {
-      return this.queueData.division
+      return this.queueData?.division
     },
     lp() {
-      return this.queueData.leaguePoints
+      return this.queueData?.leaguePoints
     },
   },
   async mounted() {
@@ -40,16 +40,24 @@ export default {
   <div :class="{ container: true, current: player.current }">
     <img class="background" :src="`${$DD}/champion/loading/${player.champion.alias}_0.jpg`" />
     <div class="content">
-      <h3 class="name">
-        {{ player.summonerInternalName }}
-      </h3>
+      <div>
+        <div>
+          {{ player.profile.gameName }}#{{ player.profile.tagLine
+          }}
+        </div>
+        <div>
+          LVL {{ player.profile.summonerLevel }}
+        </div>
+      </div>
       <div v-if="this.tier != ''">
         <img class="tier" :src="`${$DDP}/tft-regalia/TFT_Regalia_${this.tier}.png`" />
         <div>
-          {{ this.tier }} {{ this.division }}
-        </div>
-        <div>
-          {{ this.lp }} LP
+          <div>
+            {{ this.tier }} {{ this.division }}
+          </div>
+          <div>
+            {{ this.lp }} LP
+          </div>
         </div>
       </div>
     </div>
@@ -57,10 +65,8 @@ export default {
 </template>
 
 <style scoped>
-.current {
-  border: 3px solid rgba(255, 255, 0, 0.2);
-  margin: 2px !important;
-}
+.current {}
+
 
 .container {
   position: relative;
@@ -82,7 +88,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  font-size: 18px;
+  font-size: smaller;
   font-weight: bold;
   text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.8);
 }

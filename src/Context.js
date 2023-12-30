@@ -5,48 +5,93 @@ class PrivateContext {
     constructor() {
     }
 
+    async updateCatalogue() {
+        return await window.lcu.fetch("GET", "json", `/lol-catalog/v1/items/CHAMPION_SKIN`)
+    }
+
+    async updateSkins() {
+        return await window.lcu.fetch("GET", "json", `/lol-inventory/v2/inventory/CHAMPION_SKIN`)
+    }
+
+    async updateSummoner() {
+        return await window.lcu.fetch("GET", "json", `/lol-summoner/v1/current-summoner`)
+    }
+
+    async updateChampions(summoner, masteries, skins) {
+        let champions = await window.lcu.fetch("GET", "json", `/lol-champions/v1/inventories/${summoner['summonerId']}/champions-minimal`)
+        champions = champions.filter(c => c.id > 0)
+
+        for (let champion of champions) {
+            champion.mastery = masteries.find(x => x.championId == champion.id)
+            // champion.skins = skins.filter(s => s.)
+        }
+        return orderBy(champions, [({ mastery }) => mastery != undefined, "mastery.championLevel", "mastery.championPoints"], ["desc", "desc", "desc"])
+    }
+
+    async updateMasteries(summoner) {
+        return await window.lcu.fetch("GET", "json", `/lol-collections/v1/inventories/${summoner['summonerId']}/champion-mastery`)
+    }
+
+    async updateFriends() {
+        return await window.lcu.fetch("GET", "json", `/lol-chat/v1/friends`)
+    }
+
+    async updateChallenges(champions, friends) {
+        let challenges = Object.values(await window.lcu.fetch("GET", "json", `/lol-challenges/v1/challenges/local-player`))
+
+        for (let challenge of challenges) {
+            // friends linking
+            challenge.friendsAtLevels = orderBy(challenge.friendsAtLevels, (l) => -main.challenge_order.indexOf(l.level))
+
+            for (let level of challenge.friendsAtLevels) {
+                let friends_ = []
+                for (let friend of level.friends) {
+                    friends_.push(friends.find(f => f.puuid == friend))
+                }
+                level.friends = orderBy(friends_, "name")
+            }
+
+            if (challenge.idListType != "CHAMPION")
+                continue;
+
+            // champions linking
+            let champions_ = [];
+            for (let champion of champions) {
+                champions_.push({
+                    ...champion,
+                    is_available: challenge.availableIds.length <= 0 || challenge.availableIds.includes(champion.id),
+                    is_completed: challenge.completedIds.includes(champion.id)
+                })
+            }
+            challenge["champions"] = champions_
+        }
+        challenges = orderBy(challenges, (c) => -main.challenge_order.indexOf(c.currentLevel))
+        return challenges
+    }
+
+    async updateLobby() {
+        let lobby = await window.lcu.fetch("GET", "json", `/lol-lobby/v2/lobby`)
+
+        if (lobby?.httpStatus ?? 0 == 404) {
+            return undefined
+        }
+
+        return lobby
+    }
+
     async updateOnce() {
         try {
-            this.summoner = await window.lcu.fetch("GET", "json", `/lol-summoner/v1/current-summoner`)
-            this.challenges = Object.values(await window.lcu.fetch("GET", "json", `/lol-challenges/v1/challenges/local-player`))
-            this.masteries = await window.lcu.fetch("GET", "json", `/lol-collections/v1/inventories/${this.summoner['summonerId']}/champion-mastery`)
-            this.champions = await window.lcu.fetch("GET", "json", `/lol-champions/v1/inventories/${this.summoner['summonerId']}/champions-minimal`)
-            this.friends = await window.lcu.fetch("GET", "json", `/lol-chat/v1/friends`)
-
-            this.champions = this.champions.filter(c => c.id > 0)
-
-            for (let champion of this.champions) {
-                champion.mastery = this.masteries.find(x => x.championId == champion.id)
-            }
-            this.champions = orderBy(this.champions, [({ mastery }) => mastery != undefined, "mastery.championLevel", "mastery.championPoints"], ["desc", "desc", "desc"])
-
-            for (let challenge of this.challenges) {
-                // friends linking
-                challenge.friendsAtLevels = orderBy(challenge.friendsAtLevels, (l) => -main.challenge_order.indexOf(l.level))
-
-                for (let level of challenge.friendsAtLevels) {
-                    let friends = []
-                    for (let friend of level.friends) {
-                        friends.push(this.friends.find(f => f.puuid == friend))
-                    }
-                    level.friends = orderBy(friends, "name")
-                }
-
-                if (challenge.idListType != "CHAMPION")
-                    continue;
-
-                // champions linking
-                let champions = [];
-                for (let champion of this.champions) {
-                    champions.push({
-                        ...champion,
-                        is_available: challenge.availableIds.length <= 0 || challenge.availableIds.includes(champion.id),
-                        is_completed: challenge.completedIds.includes(champion.id)
-                    })
-                }
-                challenge["champions"] = champions
-            }
-            this.challenges = orderBy(this.challenges, (c) => -main.challenge_order.indexOf(c.currentLevel))
+            this.summoner = await this.updateSummoner()
+            this.friends = await this.updateFriends()
+            // this.skins = await this.updateSkins()
+            // this.catalogue = await this.updateCatalogue()
+            // console.log(this.skins)
+            // console.log(this.catalogue)
+            this.masteries = await this.updateMasteries(this.summoner)
+            this.champions = await this.updateChampions(this.summoner, this.masteries)
+            this.challenges = await this.updateChallenges(this.champions, this.friends)
+            this.lobby = await this.updateLobby()
+            console.log(this)
         }
         catch (error) {
             console.error(error);
@@ -67,9 +112,7 @@ class PrivateContext {
 
     async updateGameflow() {
         try {
-            this.session = null
             this.session = await window.lcu.fetch("GET", "json", `/lol-gameflow/v1/session`)
-            // console.log(this.session)
             // this.session = await (await fetch("src/simulation/sessionCustom.json")).json()
 
             if (this.session?.httpStatus ?? 0 == 404) {
@@ -90,12 +133,23 @@ class PrivateContext {
     }
 
     async addPlayerData(player, selections) {
+        player.profile = await window.lcu.fetch("GET", "json", `/lol-summoner/v2/summoners/puuid/${player.puuid}`)
         player.ranked = await window.lcu.fetch("GET", "json", `/lol-ranked/v1/ranked-stats/${player.puuid}`)
         player.champion = this.champions.find(c => c.id == player.championId)
         player.current = player.summonerId == this.summoner.summonerId
         player.selection = selections.find(s => s.summonerInternalName == player.summonerInternalName)
     }
 
+    async playerMatches(player) {
+        if (player?.matches == undefined) {
+            player.matches = await window.lcu.fetch("GET", "json", `/lol-match-history/v1/products/lol/${player.puuid}/matches`)
+        }
+    }
+
+
+    championById(id) {
+        return this.champions.find(c => c.id == id)
+    }
 }
 
 

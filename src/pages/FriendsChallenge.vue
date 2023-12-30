@@ -20,7 +20,6 @@ export default {
     let context = Context.getInstance()
     let id = this?.$route?.params?.challenge_id
     this.challenge = context.challenges.find(c => c.id == id)
-    console.log(this.challenge)
   }
 }
 
