@@ -18,9 +18,12 @@ export default {
   async mounted() {
     let context = Context.getInstance()
     await context.updateGameflow()
+    this.session = context.session
     this.queues = context.session.gameData.teamOne[0]?.ranked?.queues?.map(q => q.queueType)
     if (this.queues != undefined)
       this.queue = "RANKED_SOLO_5x5"
+    await context.updateMatches()
+    console.log(this.session)
   }
 }
 
@@ -29,16 +32,16 @@ export default {
 <template>
   <div>
     <div class="container" v-if="session">
-      <div class="teams">
-        <h1>{{ session.gameData.queue.detailedDescription }}
-
-          <select v-model="queue" class="right">
+      <div>
+        <h1>
+          {{ session.gameData.queue.detailedDescription || session.gameData.queue.description }}
+          <select v-model="queue" class="f-right">
             <option v-for="queue in queues" :value="queue">{{ queue }}</option>
           </select>
         </h1>
 
         <div class="team">
-          <PlayerCard class="player" :player="player" :queue="queue" v-for="player in session.gameData.teamOne"
+          <PlayerCard :player="player" :queue="queue" v-for="player in session.gameData.teamOne"
             @click="selected_player = player" :class="{ selected: player == selected_player }" />
         </div>
 
@@ -61,8 +64,6 @@ export default {
   flex-direction: row;
 }
 
-.teams {}
-
 .team {
   display: flex;
   justify-content: center;
@@ -72,11 +73,5 @@ export default {
 .selected {
   border: 3px solid rgba(255, 255, 0, 0.6);
   margin: 2px !important;
-}
-
-.player {}
-
-.right {
-  float: right;
 }
 </style>

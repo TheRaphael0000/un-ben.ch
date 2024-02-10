@@ -19,11 +19,14 @@ export default {
       return this.queueData?.division
     },
     lp() {
-      return this.queueData?.leaguePoints
+      let lp = this.queueData?.leaguePoints
+      // if (lp == "NA")
+      //   return ""
+      return lp
     },
   },
   async mounted() {
-    console.log(this.player)
+    // console.log(this.player)
     // if (this.tier == "") {
     //   this.tier = ""
     //   this.division = ""
@@ -37,37 +40,33 @@ export default {
 
 
 <template>
-  <div :class="{ container: true, current: player.current }">
+  <div class="container">
     <img class="background" :src="`${$DD}/champion/loading/${player.champion.alias}_0.jpg`" />
     <div class="content">
-      <div>
-        <div>
-          {{ player.profile.gameName }}#{{ player.profile.tagLine
-          }}
-        </div>
-        <div>
-          LVL {{ player.profile.summonerLevel }}
-        </div>
+      <div class="larger">
+        {{ player.champion.alias }}
       </div>
-      <div v-if="this.tier != ''">
+      <div>
+        {{ player.profile.gameName }}#{{ player.profile.tagLine
+        }}
+      </div>
+      <div>
+        Level {{ player.profile.summonerLevel }}
+      </div>
+      <template v-if="this.tier != ''">
         <img class="tier" :src="`${$DDP}/tft-regalia/TFT_Regalia_${this.tier}.png`" />
         <div>
-          <div>
-            {{ this.tier }} {{ this.division }}
-          </div>
-          <div>
-            {{ this.lp }} LP
-          </div>
+          {{ this.tier }} {{ this.division }}
         </div>
-      </div>
+        <div>
+          {{ this.lp }} LP
+        </div>
+      </template>
     </div>
   </div>
 </template>
 
 <style scoped>
-.current {}
-
-
 .container {
   position: relative;
   width: 200px;
@@ -79,21 +78,28 @@ export default {
 .background {
   width: 200px;
   display: block;
-  opacity: 0.6;
+  opacity: 0.8;
 }
 
 .content {
   position: absolute;
+  display: inline;
+  padding: 10px;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: calc(100% - 20px);
+  height: calc(100% - 20px);
   font-size: smaller;
   font-weight: bold;
-  text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.8);
+}
+
+.content>div {
+  display: table;
+  margin: auto;
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .content .tier {
-  width: 200px;
+  width: 180px;
 }
 </style>

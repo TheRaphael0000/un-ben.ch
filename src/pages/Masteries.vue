@@ -43,7 +43,8 @@ export default {
         Last played
       </th>
       <template v-for="champion of champions">
-        <tr v-if="champion.mastery != null" :set="mastery = champion.mastery">
+        <tr v-if="champion.mastery != null" :set="mastery = champion.mastery"
+          :class='["mastery_level", "mastery_level_" + champion?.mastery?.championLevel]'>
           <td class="left">
 
           </td>

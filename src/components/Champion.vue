@@ -42,19 +42,6 @@ export default {
   border-radius: 50% 0 0 0;
 }
 
-.mastery_level_7 {
-  background-color: #1C8C8C96;
-}
-
-.mastery_level_6 {
-  background-color: #8C1C8796;
-}
-
-.mastery_level_5 {
-  background-color: #8C201C96;
-}
-
-
 .champion {
   margin: 0;
   padding: 0;

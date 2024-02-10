@@ -48,3 +48,23 @@ a:hover {
 .right {
     text-align: right;
 }
+
+.larger {
+    font-size: larger;
+}
+
+.f-right {
+    float: right;
+}
+
+.mastery_level_7 {
+    background-color: #1C8C8C96;
+}
+
+.mastery_level_6 {
+    background-color: #8C1C8796;
+}
+
+.mastery_level_5 {
+    background-color: #8C201C96;
+}

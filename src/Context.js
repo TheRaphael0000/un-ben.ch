@@ -1,4 +1,4 @@
-import { orderBy } from "lodash"
+import { orderBy, countBy } from "lodash"
 import main from "./main"
 
 class PrivateContext {
@@ -119,17 +119,35 @@ class PrivateContext {
                 this.session = undefined
                 throw new Error()
             }
+            this.session.gameData.teamOne = orderBy(this.session.gameData.teamOne, (c) => main.role_order.indexOf(c.selectedPosition))
+            this.session.gameData.teamTwo = orderBy(this.session.gameData.teamTwo, (c) => main.role_order.indexOf(c.selectedPosition))
 
-            for (let player of this.session.gameData.teamOne.concat(this.session.gameData.teamTwo)) {
+            const players = this.session.gameData.teamOne.concat(this.session.gameData.teamTwo)
+
+            for (let player of players) {
                 await this.addPlayerData(player, this.session.gameData.playerChampionSelections)
             }
 
-            this.session.gameData.teamOne = orderBy(this.session.gameData.teamOne, (c) => main.role_order.indexOf(c.selectedPosition))
-            this.session.gameData.teamTwo = orderBy(this.session.gameData.teamTwo, (c) => main.role_order.indexOf(c.selectedPosition))
+
         }
         catch {
             return false
         }
+    }
+
+    async updateMatches() {
+        const players = this.session.gameData.teamOne.concat(this.session.gameData.teamTwo)
+        for (let player of players) {
+            await this.addPlayerMatches(player)
+            await this.addPlayerGames(player)
+        }
+        // for (let player of players) {
+        // }
+    }
+
+    async updateFriendGroup() {
+        const players = this.session.gameData.teamOne.concat(this.session.gameData.teamTwo)
+
     }
 
     async addPlayerData(player, selections) {
@@ -140,12 +158,20 @@ class PrivateContext {
         player.selection = selections.find(s => s.summonerInternalName == player.summonerInternalName)
     }
 
-    async playerMatches(player) {
-        if (player?.matches == undefined) {
-            player.matches = await window.lcu.fetch("GET", "json", `/lol-match-history/v1/products/lol/${player.puuid}/matches`)
-        }
+    async addPlayerMatches(player) {
+        player.matches = await window.lcu.fetch("GET", "json", `/lol-match-history/v1/products/lol/${player.puuid}/matches`)
     }
 
+    async addPlayerGames(player) {
+        player.friends = new Set()
+        for (let game of player.matches.games.games) {
+            game.details = await window.lcu.fetch("GET", "json", `/lol-match-history/v1/games/${game.gameId}`)
+            for (const [id, participant] of Object.entries(game.details.participantIdentities)) {
+                if (participant.player.puuid != player.puuid)
+                    player.friends.add(participant.player.puuid)
+            }
+        }
+    }
 
     championById(id) {
         return this.champions.find(c => c.id == id)

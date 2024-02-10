@@ -4,28 +4,14 @@ import Context from '../Context'
 
 export default {
   props: ["player"],
-  watch: {
-    player: function (newVal, oldVal) {
-      this.updateMatches(newVal)
-    }
-  },
   data() {
     return {
       context: null,
     }
   },
-  computed: {
-
-  },
   async mounted() {
     this.context = Context.getInstance()
-    this.context.playerMatches(this.player)
   },
-  methods: {
-    updateMatches(player) {
-      this.context.playerMatches(player)
-    }
-  }
 }
 
 </script>
@@ -33,9 +19,9 @@ export default {
 
 <template>
   <div>
-    <p>
-      level {{ player.profile.summonerLevel }}
-    </p>
+    <div>
+      {{ player.profile.gameName }}#{{ player.profile.tagLine }}
+    </div>
     <img class="profile_icon" :src="`${$DDP}/profileicon/${player.profile.profileIconId}.png`" />
 
     <div v-if="player.matches != undefined">
@@ -43,7 +29,7 @@ export default {
         :class="{ game: true, win: game.participants[0].stats.win, lose: !game.participants[0].stats.win }"
         :set="stats = game.participants[0].stats">
         <img class="champion"
-          :src="`${$DDP}/champion/${context.championById(game.participants[0].championId).alias}.png`" />
+          :src="`${$DDP}/champion/${context?.championById(game.participants[0].championId).alias}.png`" />
         {{ stats.kills }} / {{ stats.deaths }} / {{
           stats.assists }}
 
