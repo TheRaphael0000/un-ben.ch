@@ -36,11 +36,14 @@ export default {
       <th class="center">
         Chest
       </th>
-      <th class="left">
+      <!-- <th class="left">
         Max
       </th>
       <th class="left">
         Last played
+      </th> -->
+      <th class="left">
+        Skins
       </th>
       <template v-for="champion of champions">
         <tr v-if="champion.mastery != null" :set="mastery = champion.mastery"
@@ -79,11 +82,14 @@ export default {
           <td class="center">
             <input type="checkbox" :checked="mastery.chestGranted" />
           </td>
-          <td class="left">
+          <!-- <td class="left">
             {{ mastery.highestGrade }}
-          </td>
-          <td :set="date = new Date(mastery.lastPlayTime)">
+          </td> -->
+          <!-- <td :set="date = new Date(mastery.lastPlayTime)">
             {{ date.toLocaleDateString() }} {{ date.toLocaleTimeString() }}
+          </td> -->
+          <td>
+            {{ champion?.skins?.length ?? 0 }}
           </td>
         </tr>
       </template>

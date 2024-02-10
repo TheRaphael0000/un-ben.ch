@@ -1,11 +1,12 @@
 import { orderBy, countBy } from "lodash"
 import main from "./main"
 
+
 class PrivateContext {
     constructor() {
     }
 
-    async updateCatalogue() {
+    async updateCatalog() {
         return await window.lcu.fetch("GET", "json", `/lol-catalog/v1/items/CHAMPION_SKIN`)
     }
 
@@ -17,20 +18,49 @@ class PrivateContext {
         return await window.lcu.fetch("GET", "json", `/lol-summoner/v1/current-summoner`)
     }
 
-    async updateChampions(summoner, masteries, skins) {
+    async updateChampions(summoner, masteries, skins, catalog) {
+        // let championFull = await window.file.fetch(`/data/en_US/championFull.json`)
+        // let championFullValues = Object.values(championFull.data)
+        // console.log(championFull)
+
         let champions = await window.lcu.fetch("GET", "json", `/lol-champions/v1/inventories/${summoner['summonerId']}/champions-minimal`)
         champions = champions.filter(c => c.id > 0)
 
+
         for (let champion of champions) {
             champion.mastery = masteries.find(x => x.championId == champion.id)
-            // champion.skins = skins.filter(s => s.)
+            champion.catalog = []
+            champion.skins = []
+            champion.chromas = []
         }
+
+        for (let catalog_entry of catalog) {
+            let champion = this.getChampFromSkin(champions, catalog_entry.itemId)
+            champion.catalog.push(catalog_entry)
+        }
+
+        for (let skin of skins) {
+            let champion = this.getChampFromSkin(champions, skin.itemId)
+            let catalog_entry = this.catalog.find(c => c.itemId == skin.itemId)
+
+            if (catalog_entry.subInventoryType == "RECOLOR")
+                champion.chromas.push(skin)
+            else
+                champion.skins.push(skin)
+        }
+
         return orderBy(champions, [({ mastery }) => mastery != undefined, "mastery.championLevel", "mastery.championPoints"], ["desc", "desc", "desc"])
+    }
+
+    getChampFromSkin(champions, skinId) {
+        let id = parseInt(skinId.toString().slice(0, -3))
+        return champions.find(s => s.id == id)
     }
 
     async updateMasteries(summoner) {
         return await window.lcu.fetch("GET", "json", `/lol-collections/v1/inventories/${summoner['summonerId']}/champion-mastery`)
     }
+
 
     async updateFriends() {
         return await window.lcu.fetch("GET", "json", `/lol-chat/v1/friends`)
@@ -83,12 +113,10 @@ class PrivateContext {
         try {
             this.summoner = await this.updateSummoner()
             this.friends = await this.updateFriends()
-            // this.skins = await this.updateSkins()
-            // this.catalogue = await this.updateCatalogue()
-            // console.log(this.skins)
-            // console.log(this.catalogue)
+            this.skins = await this.updateSkins()
+            this.catalog = await this.updateCatalog()
             this.masteries = await this.updateMasteries(this.summoner)
-            this.champions = await this.updateChampions(this.summoner, this.masteries)
+            this.champions = await this.updateChampions(this.summoner, this.masteries, this.skins, this.catalog)
             this.challenges = await this.updateChallenges(this.champions, this.friends)
             this.lobby = await this.updateLobby()
             console.log(this)
@@ -141,13 +169,10 @@ class PrivateContext {
             await this.addPlayerMatches(player)
             await this.addPlayerGames(player)
         }
-        // for (let player of players) {
-        // }
     }
 
     async updateFriendGroup() {
         const players = this.session.gameData.teamOne.concat(this.session.gameData.teamTwo)
-
     }
 
     async addPlayerData(player, selections) {

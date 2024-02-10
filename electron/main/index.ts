@@ -2,6 +2,7 @@ import { app, BrowserWindow, shell, ipcMain, session } from "electron"
 import { release } from "node:os"
 import { join } from "node:path"
 import LCU from "./LCU"
+import File from "./File"
 
 
 // app.commandLine.appendSwitch('ignore-certificate-errors')
@@ -43,6 +44,12 @@ async function createWindow() {
 
   ipcMain.handle("lcu-fetch", async (event, method, type, url) => {
     return lcu.fetch(method, type, url);
+  })
+
+  let file = new File()
+
+  ipcMain.handle("file-fetch", async (event, path) => {
+    return file.fetch(path);
   })
 
   if (process.env.VITE_DEV_SERVER_URL) {
