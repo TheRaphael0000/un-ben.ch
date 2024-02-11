@@ -7,9 +7,17 @@ export default {
   },
   data: () => ({
     champions: null,
+    catalog_skins: null,
+    catalog_chromas: null,
+    owned_skins: null,
+    owned_chromas: null,
   }),
   async mounted() {
     this.champions = Context.getInstance().champions
+    this.catalog_skins = Context.getInstance().catalog_skins
+    this.catalog_chromas = Context.getInstance().catalog_chromas
+    this.owned_skins = Context.getInstance().owned_skins
+    this.owned_chromas = Context.getInstance().owned_chromas
   }
 }
 
@@ -43,7 +51,10 @@ export default {
         Last played
       </th> -->
       <th class="left">
-        Skins
+        Skins<br>{{ owned_skins?.length }} / {{ catalog_skins?.length }}
+      </th>
+      <th class="left">
+        Chromas<br>{{ owned_chromas?.length }} / {{ catalog_chromas?.length }}
       </th>
       <template v-for="champion of champions">
         <tr v-if="champion.mastery != null" :set="mastery = champion.mastery"
@@ -89,7 +100,10 @@ export default {
             {{ date.toLocaleDateString() }} {{ date.toLocaleTimeString() }}
           </td> -->
           <td>
-            {{ champion?.skins?.length ?? 0 }}
+            {{ champion?.owned_skins?.length ?? 0 }} / {{ champion?.catalog_skins?.length ?? 0 }}
+          </td>
+          <td>
+            {{ champion?.owned_chromas?.length ?? 0 }} / {{ champion?.catalog_chromas?.length ?? 0 }}
           </td>
         </tr>
       </template>
