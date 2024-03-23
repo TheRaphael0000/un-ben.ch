@@ -3,6 +3,7 @@ import { release } from "node:os"
 import { join } from "node:path"
 import LCU from "./LCU"
 import File from "./File"
+import Data from "./Data"
 
 
 // app.commandLine.appendSwitch('ignore-certificate-errors')
@@ -37,6 +38,8 @@ async function createWindow() {
     },
   })
 
+  win.webContents.openDevTools()
+
   win.setMenu(null)
   // win.setBackgroundMaterial("none")
 
@@ -52,11 +55,19 @@ async function createWindow() {
     return file.fetch(path);
   })
 
+
+  let data = new Data()
+
+  ipcMain.handle("data-opgg_ranked", async (event) => {
+    return data.opgg_ranked();
+  })
+
   if (process.env.VITE_DEV_SERVER_URL) {
+    console.log("DEBUG")
     win.loadURL(url)
-    win.webContents.openDevTools()
     // win.webContents.openDevTools({ mode: 'detach' })
   } else {
+    console.log("RELEASE")
     win.loadFile(indexHtml)
   }
 

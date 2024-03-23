@@ -101,6 +101,13 @@ class PrivateContext {
         this.challenges = orderBy(challenges, (c) => -main.challenge_order.indexOf(c.currentLevel))
     }
 
+    async updateRankedData() {
+        let opgg_ranked = await window.data.opgg_ranked()
+        for (let c of this.champions) {
+            c.ranked_data = opgg_ranked.data.find(d => d.id == c.id)
+        }
+    }
+
     async updateLobby() {
         let lobby = await window.lcu.fetch("GET", "json", `/lol-lobby/v2/lobby`)
 
@@ -122,6 +129,7 @@ class PrivateContext {
             await this.updateChampions()
             await this.updateChallenges()
             await this.updateLobby()
+            await this.updateRankedData()
             console.log(this)
         }
         catch (error) {

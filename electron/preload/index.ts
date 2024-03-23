@@ -9,3 +9,7 @@ contextBridge.exposeInMainWorld('lcu', {
 contextBridge.exposeInMainWorld('file', {
   fetch: (path) => ipcRenderer.invoke('file-fetch', path),
 })
+
+contextBridge.exposeInMainWorld('data', {
+  opgg_ranked: () => ipcRenderer.invoke('data-opgg_ranked'),
+})
